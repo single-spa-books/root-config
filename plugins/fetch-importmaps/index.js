@@ -1,47 +1,53 @@
-// const https = require("https");
-// const { Buffer } = require("buffer");
+const https = require("https");
+const { parse } = require("url");
 
-// const params = {
-//   service: "my-service",
-//   url:
-//     "https://raw.githubusercontent.com/mallonenogueira/teste-deployer/master/web.js",
-// };
-
-// const options = {
-//   method: "PATCH",
-//   hostname: "import-map-deployer-mallone.herokuapp.com",
-//   port: null,
-//   path: "/services",
-//   headers: {
-//     "content-type": "application/json",
-//     "content-length": "118",
-//     authorization: "Basic YWRtaW46MTIzNA==",
-//   },
-// };
-
-// const req = https.request(options, () => {});
-
-// req.write(JSON.stringify(params));
-
-// req.end();
-
-const path = require("path");
-const fs = require("fs");
-
-module.exports = {
-  onPostBuild: (args) => {
-    console.log(args);
-
-    const { netlifyConfig } = args;
-
-    fs.readdir(netlifyConfig.build.publish, function (err, files) {
-      if (err) {
-        return console.log("Unable to scan directory: " + err);
-      }
-
-      files.forEach(function (file) {
-        console.log(file);
+const api = (urlOptions, data) => {
+  return new Promise((resolve, reject) => {
+    const req = https.request(urlOptions, (res) => {
+      res.on("data", () => {});
+      res.on("error", reject);
+      res.on("end", () => {
+        if (res.statusCode >= 200 && res.statusCode <= 299) {
+          resolve();
+        } else {
+          reject();
+        }
       });
     });
+    req.on("error", reject);
+    req.write(data, "binary");
+    req.end();
+  });
+};
+
+module.exports = {
+  onSuccess: async (args) => {
+    // eslint-disable-next-line no-undef
+    const { IMPORTMAP_URL, IMPORTMAP_AUTH } = process.env;
+    const { service, file, file_url } = args.inputs;
+
+    const githash = args.utils.git.commits[0].sha.slice(0, 7);
+    const url = file_url + file.replace("[githash]", githash);
+
+    const params = {
+      service,
+      url,
+    };
+
+    const options = {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+      },
+    };
+
+    if (IMPORTMAP_AUTH) {
+      options.headers.authorization = IMPORTMAP_AUTH;
+    }
+
+    await api(
+      Object.assign(options, parse(IMPORTMAP_URL, options)),
+      JSON.stringify(params)
+    );
   },
 };

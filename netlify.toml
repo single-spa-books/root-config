@@ -1,2 +1,14 @@
 [[plugins]]
-package = "/plugins/fetch-importmaps"
+package = "./plugins/fetch-importmaps"
+  [plugins.inputs]
+    service = "root-config"
+    file = "[githash].single-spa-books-root-config.js"
+    file_url = "https://develop--single-spa-books-root-config.netlify.app/"
+
+[context.production.environment]
+  IMPORTMAP_URL = "https://import-map-deployer-mallone.herokuapp.com/services"
+  IMPORTMAP_AUTH = "Basic YWRtaW46MTIzNA=="
+
+[context.develop.environment]
+  IMPORTMAP_URL = "https://import-map-deployer-mallone.herokuapp.com/services?env=dev"
+  IMPORTMAP_AUTH = "Basic YWRtaW46MTIzNA=="
