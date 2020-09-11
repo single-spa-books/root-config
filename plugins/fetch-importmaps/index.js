@@ -4,13 +4,20 @@ const { parse } = require("url");
 const api = (urlOptions, data) => {
   return new Promise((resolve, reject) => {
     const req = https.request(urlOptions, (res) => {
-      res.on("data", () => {});
+      let body = "";
+      res.on("data", (chunk) => (body += chunk.toString()));
       res.on("error", reject);
       res.on("end", () => {
+        const response = {
+          status: res.statusCode,
+          headers: res.headers,
+          body,
+        };
+
         if (res.statusCode >= 200 && res.statusCode <= 299) {
-          resolve();
+          resolve(response);
         } else {
-          reject();
+          reject(response);
         }
       });
     });
@@ -50,9 +57,13 @@ module.exports = {
 
     console.log("IMPORTMAP_URL: ", IMPORTMAP_URL);
 
-    await api(
-      Object.assign(options, parse(IMPORTMAP_URL, options)),
-      JSON.stringify(params)
-    );
+    try {
+      await api(
+        Object.assign(options, parse(IMPORTMAP_URL)),
+        JSON.stringify(params)
+      );
+    } catch (error) {
+      console.log("ERROR:", error);
+    }
   },
 };

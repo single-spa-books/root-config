@@ -6,9 +6,9 @@ package = "./plugins/fetch-importmaps"
     file_url = "https://develop--single-spa-books-root-config.netlify.app/"
 
 [context.production.environment]
-  IMPORTMAP_URL = "https://import-map-deployer-mallone.herokuapp.com/services"
+  IMPORTMAP_URL = "https://import-map-deployer-mallone.herokuapp.com/services?skip_url_check"
   IMPORTMAP_AUTH = "Basic YWRtaW46MTIzNA=="
 
 [context.develop.environment]
-  IMPORTMAP_URL = "https://import-map-deployer-mallone.herokuapp.com/services?env=dev"
+  IMPORTMAP_URL = "https://import-map-deployer-mallone.herokuapp.com/services?env=dev&skip_url_check"
   IMPORTMAP_AUTH = "Basic YWRtaW46MTIzNA=="
