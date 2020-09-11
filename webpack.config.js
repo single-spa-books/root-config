@@ -1,6 +1,7 @@
 const webpackMerge = require("webpack-merge");
 const singleSpaDefaults = require("webpack-config-single-spa");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const WebpackGitHash = require("webpack-git-hash");
 
 module.exports = (webpackConfigEnv) => {
   const orgName = "single-spa-books";
@@ -15,7 +16,11 @@ module.exports = (webpackConfigEnv) => {
     devServer: {
       historyApiFallback: true,
     },
+    output: {
+      filename: `[githash].${defaultConfig.output.filename}`,
+    },
     plugins: [
+      new WebpackGitHash(),
       new HtmlWebpackPlugin({
         inject: false,
         template: "src/index.ejs",
