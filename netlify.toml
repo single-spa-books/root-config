@@ -3,7 +3,7 @@ package = "./plugins/fetch-importmaps"
 
 [build.environment]
   IMPORTMAP_FILE = "[githash].single-spa-books-root-config.js"
-  IMPORTMAP_SERVICE = "root-config"
+  IMPORTMAP_SERVICE = "@single-spa-books/root-config"
 
 [context.production.environment]
   IMPORTMAP_FILE_URL = "https://single-spa-books-root-config.netlify.app/"
