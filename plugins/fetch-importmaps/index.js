@@ -1,5 +1,6 @@
 const https = require("https");
 const { parse } = require("url");
+const fs = require("fs");
 
 const api = (urlOptions, data) => {
   return new Promise((resolve, reject) => {
@@ -28,14 +29,17 @@ const api = (urlOptions, data) => {
 };
 
 function createParams(args) {
-  // eslint-disable-next-line no-undef
-  const { IMPORTMAP_FILE_URL, IMPORTMAP_FILE, IMPORTMAP_SERVICE } = process.env;
-  let file = IMPORTMAP_FILE;
+  const {
+    IMPORTMAP_FILE_URL,
+    IMPORTMAP_FILE,
+    IMPORTMAP_SERVICE,
+  } = global.process.env;
 
-  if (file.includes("[githash]")) {
-    const githash = args.utils.git.commits[0].sha.slice(0, 7);
-    file = file.replace("[githash]", githash);
-  }
+  const regexFile = RegExp(IMPORTMAP_FILE);
+
+  const file = fs
+    .readdirSync(args.netlifyConfig.build.publish)
+    .find(regexFile.test.bind(regexFile));
 
   return {
     service: IMPORTMAP_SERVICE,
@@ -45,8 +49,7 @@ function createParams(args) {
 
 module.exports = {
   onSuccess: async (args) => {
-    // eslint-disable-next-line no-undef
-    const { IMPORTMAP_URL, IMPORTMAP_AUTH } = process.env;
+    const { IMPORTMAP_URL, IMPORTMAP_AUTH } = global.process.env;
 
     const params = createParams(args);
 
@@ -71,6 +74,8 @@ module.exports = {
         Object.assign(options, parse(IMPORTMAP_URL)),
         JSON.stringify(params)
       );
+
+      console.log("SUCCESS!");
     } catch (error) {
       console.log("ERROR:", error);
       throw error;

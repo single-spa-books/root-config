@@ -2,7 +2,7 @@
 package = "./plugins/fetch-importmaps"
 
 [build.environment]
-  IMPORTMAP_FILE = "[githash].single-spa-books-root-config.js"
+  IMPORTMAP_FILE = "^[0-9a-f]{7}.single-spa-books-root-config.js$"
   IMPORTMAP_SERVICE = "@single-spa-books/root-config"
 
 [context.production.environment]
