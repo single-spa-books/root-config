@@ -12,3 +12,9 @@ package = "./plugins/fetch-importmaps"
 [context.develop.environment]
   IMPORTMAP_FILE_URL = "https://develop--single-spa-books-root-config.netlify.app/"
   IMPORTMAP_URL = "https://single-spa-books.herokuapp.com/services?env=dev&skip_url_check"
+
+[[headers]]
+  for = "/*"
+    [headers.values]
+    Access-Control-Allow-Origin = "*"
+
