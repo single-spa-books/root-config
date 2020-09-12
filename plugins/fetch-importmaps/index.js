@@ -27,19 +27,28 @@ const api = (urlOptions, data) => {
   });
 };
 
+function createParams(args) {
+  // eslint-disable-next-line no-undef
+  const { IMPORTMAP_FILE_URL, IMPORTMAP_FILE, IMPORTMAP_SERVICE } = process.env;
+  let file = IMPORTMAP_FILE;
+
+  if (file.includes("[githash]")) {
+    const githash = args.utils.git.commits[0].sha.slice(0, 7);
+    file = file.replace("[githash]", githash);
+  }
+
+  return {
+    service: IMPORTMAP_SERVICE,
+    url: IMPORTMAP_FILE_URL + file,
+  };
+}
+
 module.exports = {
   onSuccess: async (args) => {
     // eslint-disable-next-line no-undef
     const { IMPORTMAP_URL, IMPORTMAP_AUTH } = process.env;
-    const { service, file, file_url } = args.inputs;
 
-    const githash = args.utils.git.commits[0].sha.slice(0, 7);
-    const url = file_url + file.replace("[githash]", githash);
-
-    const params = {
-      service,
-      url,
-    };
+    const params = createParams(args);
 
     const options = {
       method: "PATCH",
@@ -64,6 +73,7 @@ module.exports = {
       );
     } catch (error) {
       console.log("ERROR:", error);
+      throw error;
     }
   },
 };

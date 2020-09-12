@@ -1,11 +1,1 @@
 name: fetch-importmaps
-inputs:
-  - name: service
-    description: ""
-    required: true
-  - name: file
-    description: ""
-    required: true
-  - name: file_url
-    description: ""
-    required: true
