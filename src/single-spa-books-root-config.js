@@ -6,6 +6,12 @@ registerApplication({
   activeWhen: ["/"],
 });
 
+registerApplication({
+  name: "@single-spa-books/home",
+  app: () => System.import("@single-spa-books/home"),
+  activeWhen: ["/"],
+});
+
 start({
   urlRerouteOnly: true,
 });
