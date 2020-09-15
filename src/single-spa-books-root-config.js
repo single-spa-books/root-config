@@ -9,7 +9,13 @@ registerApplication({
 registerApplication({
   name: "@single-spa-books/home",
   app: () => System.import("@single-spa-books/home"),
-  activeWhen: ["/"],
+  activeWhen: ({ pathname }) => pathname === "/",
+});
+
+registerApplication({
+  name: "@single-spa-books/books",
+  app: () => System.import("@single-spa-books/books"),
+  activeWhen: ["/books"],
 });
 
 start({

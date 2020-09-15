@@ -61,10 +61,12 @@
   <% } %>
 </head>
 <body>
-  <main></main>
   <script>
     System.import('@single-spa-books/root-config');
   </script>
   <import-map-overrides-full show-when-local-storage="devtools" dev-libs></import-map-overrides-full>
+
+  <div id="single-spa-application:@single-spa-books/navbar"></div>
+
 </body>
 </html>
