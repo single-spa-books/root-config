@@ -18,3 +18,8 @@ package = "./plugins/fetch-importmaps"
     [headers.values]
     Access-Control-Allow-Origin = "*"
 
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  
