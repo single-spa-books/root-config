@@ -3,6 +3,16 @@ const singleSpaDefaults = require("webpack-config-single-spa");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WebpackGitHash = require("webpack-git-hash");
 
+function getOutput(defaultConfig) {
+  if (global.process.env.WEBPACK_DEV_SERVER === "true") {
+    return {};
+  }
+
+  return {
+    filename: `[githash].${defaultConfig.output.filename}`,
+  };
+}
+
 module.exports = (webpackConfigEnv) => {
   const orgName = "single-spa-books";
   const defaultConfig = singleSpaDefaults({
@@ -16,9 +26,7 @@ module.exports = (webpackConfigEnv) => {
     devServer: {
       historyApiFallback: true,
     },
-    output: {
-      filename: `[githash].${defaultConfig.output.filename}`,
-    },
+    output: getOutput(defaultConfig),
     plugins: [
       new WebpackGitHash(),
       new HtmlWebpackPlugin({
