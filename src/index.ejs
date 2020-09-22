@@ -59,14 +59,43 @@
   <script src="https://cdn.jsdelivr.net/npm/systemjs@6.4.0/dist/extras/amd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/systemjs@6.4.0/dist/extras/named-exports.min.js"></script>
   <% } %>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    
+    .loading {
+      font-size: 42px;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loading-module {
+      height: calc(100vh - 60px);
+    }
+
+    .loading-application {
+      height: 100vh;
+    }
+  </style>
 </head>
 <body>
   <script>
     System.import('@single-spa-books/root-config');
   </script>
   <import-map-overrides-full show-when-local-storage="devtools" dev-libs></import-map-overrides-full>
-
+  
   <div id="single-spa-application:@single-spa-books/navbar"></div>
+  <div id="application-loading"></div>
 
 </body>
 </html>
